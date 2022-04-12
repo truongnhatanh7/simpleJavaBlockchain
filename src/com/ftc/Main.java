@@ -3,9 +3,9 @@ package com.ftc;
 public class Main {
 
     public static void main(String[] args) {
-        Block genesisBlock = new Block("0000", "github", 0);
-        System.out.println(genesisBlock.getNonce());
-        System.out.println(genesisBlock.calculateHash());
-        System.out.println(genesisBlock.getHash());
+        Blockchain blockchain = new Blockchain();
+        for (int i = 0; i < 100; i++) { // Create 100 block
+            blockchain.addBlock(i + " transaction");
+        }
     }
 }

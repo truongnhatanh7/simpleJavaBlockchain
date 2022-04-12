@@ -59,10 +59,10 @@ public class Block {
     public String calculateHash() {
         byte[] encodedhash = null;
         try {
-            String combinedString = this.data
-                    + this.timestamp
-                    + this.nonce
-                    + prevHash;
+            String combinedString = data
+                                + timestamp
+                                + nonce
+                                + prevHash;
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             encodedhash = digest.digest(
                     combinedString.getBytes(StandardCharsets.UTF_8));
@@ -70,13 +70,20 @@ public class Block {
             System.out.println("Failed to hash");
         }
         StringBuilder finalString = new StringBuilder();
-        if (encodedhash != null) {
-            for (byte b : encodedhash) {
-                finalString.append(String.format("%02x", b));
-            }
-            this.setHash(finalString.toString());
+        for (byte b : encodedhash) {
+            finalString.append(String.format("%02x", b));
         }
-
         return finalString.toString();
+    }
+
+    public String mineBlock(int difficulty) {
+        System.out.println("Mining...");
+        String key = "00000000000000000";
+        hash = calculateHash();
+        while (!hash.substring(0,difficulty).equals(key.substring(0, difficulty))) {
+            nonce++;
+            hash = calculateHash();
+        }
+        return hash;
     }
 }
