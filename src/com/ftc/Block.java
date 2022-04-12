@@ -1,5 +1,8 @@
 package com.ftc;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+
 public class Block {
     private String hash;
     private String prevHash;
@@ -51,5 +54,29 @@ public class Block {
 
     public void setNonce(int nonce) {
         this.nonce = nonce;
+    }
+
+    public String calculateHash() {
+        byte[] encodedhash = null;
+        try {
+            String combinedString = this.data
+                    + this.timestamp
+                    + this.nonce
+                    + prevHash;
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            encodedhash = digest.digest(
+                    combinedString.getBytes(StandardCharsets.UTF_8));
+        } catch (Exception exception) {
+            System.out.println("Failed to hash");
+        }
+        StringBuilder finalString = new StringBuilder();
+        if (encodedhash != null) {
+            for (byte b : encodedhash) {
+                finalString.append(String.format("%02x", b));
+            }
+            this.setHash(finalString.toString());
+        }
+
+        return finalString.toString();
     }
 }
